@@ -54,6 +54,8 @@ class PengajuanController extends Controller
             "tanggal_berakhir" => $validateData['tanggal_berakhir'],
             "alamat_tujuan" => $validateData['alamat_tujuan'],
             "deskrispi_pengajuan" => $validateData['deskrispi_pengajuan'],
+            "id_pemohon" => '2',
+            "id_atasan" => '1',
         ]);
 
         return response()->json(['message' => 'success'], 201);

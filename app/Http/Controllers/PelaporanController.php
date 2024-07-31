@@ -45,6 +45,7 @@ class PelaporanController extends Controller
             "bukti_kejadian" => $buktiKejadianPath,
             "deskripsi_kejadian" => $validateData['deskripsi_kejadian'],
             "tempat_kejadian" => $validateData['tempat_kejadian'],
+            "id_pelapor" => '2',
         ]);
 
         return response()->json(['message' => 'success'], 201);
