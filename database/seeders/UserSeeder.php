@@ -42,7 +42,7 @@ class UserSeeder extends Seeder
             "tanggal_mulai" => '2024/07/01',
             "tanggal_berakhir" => '2024/08/01',
             "alamat_tujuan" => 'Jakarta',
-            "deskrispi_pengajuan" => 'Dinas ke pangkalan jakarta',
+            "deskripsi_pengajuan" => 'Dinas ke pangkalan jakarta',
             "id_pemohon" => '2',
             "id_atasan" => '1',
         ]);
@@ -55,6 +55,5 @@ class UserSeeder extends Seeder
             "tempat_kejadian" => 'keramaian',
             "id_pelapor" => '2'
         ]);
-        
     }
 }

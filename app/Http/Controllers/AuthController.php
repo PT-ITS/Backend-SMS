@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -21,9 +22,9 @@ class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register','import']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'import']]);
     }
-    
+
     public function listUser()
     {
         $data = User::all();
@@ -106,10 +107,12 @@ class AuthController extends Controller
         ]);
     }
 
-    public function register(Request $request){
+    public function register(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'email' => 'required|email|unique:users',
+            'password' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -118,14 +121,15 @@ class AuthController extends Controller
 
         $user = User::create([
             'name' => $request->input('name'),
-            'email' => $request->input('email')
+            'email' => $request->input('email'),
+            'password' => bcrypt(request('password')),
         ]);
 
         if ($user) {
             // $this->emailController->index($user->id);
             Mail::to($user->email)->send(new SendEmail($user->id));
             // Mail::to($user->email)->send(new EmailVerification($user));
-            return response()->json(['message' => 'Registration successful'],201);
+            return response()->json(['message' => 'Registration successful'], 201);
         } else {
             return response()->json(['message' => 'Registration failed'], 500);
         }
@@ -136,7 +140,7 @@ class AuthController extends Controller
     {
         $credentials = request(['email', 'password']);
 
-        if (! $token = JWTAuth::attempt($credentials)) {
+        if (!$token = JWTAuth::attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
@@ -183,18 +187,94 @@ class AuthController extends Controller
             'expires_in' => auth()->factory()->getTTL() * 60,
         ]);
     }
-    
-    public function deleteUser($id)
+
+    public function listPengguna()
+    {
+        try {
+            $result = User::get();
+            return response()->json(
+                [
+                    'message' => 'data pengguna ditemukan',
+                    'data' => $result
+                ],
+                200
+            );
+        } catch (\Exception  $e) {
+            return response()->json([
+                'message' => $e->getMessage(),
+                'data' => null
+            ], 401);
+        }
+    }
+
+    public function create(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->messages()], 400);
+        }
+
+        $user = User::create([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'password' => bcrypt(request('password')),
+        ]);
+
+        if ($user) {
+            return response()->json(['message' => 'Registration successful'], 201);
+        } else {
+            return response()->json(['message' => 'Registration failed'], 500);
+        }
+    }
+
+    public function update(Request $request, $id)
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'User not found',
+                'data' => null
+            ], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email,' . $id,
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->messages()], 400);
+        }
+
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+
+        $user->save();
+
+        return response()->json([
+            'message' => 'success',
+            'data' => $user
+        ], 200);
+    }
+
+    public function delete($id)
     {
         $data = User::find($id);
         if ($data) {
             $data->delete();
             return response()->json([
                 'message' => 'success',
-            ]);
+
+            ], 200);
         }
         return response()->json([
             'message' => 'data not found'
-        ]);
+        ], 404);
     }
 }

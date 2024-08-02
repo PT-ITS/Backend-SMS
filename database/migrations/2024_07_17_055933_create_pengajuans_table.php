@@ -24,7 +24,7 @@ class CreatePengajuansTable extends Migration
             $table->date('tanggal_mulai');
             $table->date('tanggal_berakhir');
             $table->string('alamat_tujuan');
-            $table->text('deskrispi_pengajuan');
+            $table->text('deskripsi_pengajuan');
             $table->enum('status_pengajuan', [
                 '0', //proses
                 '1', //disetujui

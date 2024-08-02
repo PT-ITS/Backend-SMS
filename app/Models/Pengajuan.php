@@ -19,7 +19,7 @@ class Pengajuan extends Model
         "tanggal_mulai",
         "tanggal_berakhir",
         "alamat_tujuan",
-        "deskrispi_pengajuan",
+        "deskripsi_pengajuan",
         "status_pengajuan",
         "id_pemohon",
         "id_atasan"

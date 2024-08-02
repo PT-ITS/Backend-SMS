@@ -11,10 +11,32 @@ class PengajuanController extends Controller
     public function listAllPengajuan()
     {
         $dataPengajuan = Pengajuan::all();
-        
+
         return response()->json(['message' => 'success', 'data' => $dataPengajuan]);
     }
-    
+
+    public function listPengajuanProses()
+    {
+        $dataPengajuan = Pengajuan::where('status_pengajuan', '0')->get();
+
+        if ($dataPengajuan->isNotEmpty()) {
+            return response()->json(['message' => 'success', 'data' => $dataPengajuan]);
+        }
+        return response()->json(['message' => 'no data found'], 401);
+    }
+
+    public function listPengajuanSudahProses()
+    {
+        $dataPengajuan = Pengajuan::where('status_pengajuan', '1')
+            ->orWhere('status_pengajuan', '2')
+            ->get();
+
+        if ($dataPengajuan->isNotEmpty()) {
+            return response()->json(['message' => 'success', 'data' => $dataPengajuan]);
+        }
+        return response()->json(['message' => 'no data found'], 401);
+    }
+
     public function listMyPengajuan()
     {
         $dataPengajuan = Pengajuan::where('id_pemohon', auth()->user()->id)->get();
@@ -37,7 +59,7 @@ class PengajuanController extends Controller
             "tanggal_mulai" => "required|date",
             "tanggal_berakhir" => "required|date",
             "alamat_tujuan" => "required|string",
-            "deskrispi_pengajuan" => "required|string",
+            "deskripsi_pengajuan" => "required|string",
         ]);
 
         $ktpPath = $request->file('ktp')->store('ktp', 'public');
@@ -53,7 +75,7 @@ class PengajuanController extends Controller
             "tanggal_mulai" => $validateData['tanggal_mulai'],
             "tanggal_berakhir" => $validateData['tanggal_berakhir'],
             "alamat_tujuan" => $validateData['alamat_tujuan'],
-            "deskrispi_pengajuan" => $validateData['deskrispi_pengajuan'],
+            "deskripsi_pengajuan" => $validateData['deskripsi_pengajuan'],
             "id_pemohon" => '2',
             "id_atasan" => '1',
         ]);
@@ -73,7 +95,7 @@ class PengajuanController extends Controller
             "tanggal_mulai" => "required|date",
             "tanggal_berakhir" => "required|date",
             "alamat_tujuan" => "required|string",
-            "deskrispi_pengajuan" => "required|string",
+            "deskripsi_pengajuan" => "required|string",
         ]);
 
         $dataPengajuan = Pengajuan::find($id);
@@ -98,7 +120,7 @@ class PengajuanController extends Controller
             $dataPengajuan->tanggal_mulai = $validateData['tanggal_mulai'];
             $dataPengajuan->tanggal_berakhir = $validateData['tanggal_berakhir'];
             $dataPengajuan->alamat_tujuan = $validateData['alamat_tujuan'];
-            $dataPengajuan->deskrispi_pengajuan = $validateData['deskrispi_pengajuan'];
+            $dataPengajuan->deskripsi_pengajuan = $validateData['deskripsi_pengajuan'];
             $dataPengajuan->save();
 
             return response()->json(['message' => 'success']);
@@ -134,11 +156,11 @@ class PengajuanController extends Controller
 
         if ($dataPengajuan) {
             if ($validateData['action'] == 'setuju') {
-                $dataPengajuan->status = '1';
+                $dataPengajuan->status_pengajuan = '1';
                 $dataPengajuan->save();
                 return response()->json(['message' => 'success'], 200);
             } else if ($validateData['action'] == 'tolak') {
-                $dataPengajuan->status = '2';
+                $dataPengajuan->status_pengajuan = '2';
                 $dataPengajuan->save();
                 return response()->json(['message' => 'success'], 200);
             } else {
