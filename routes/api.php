@@ -44,5 +44,6 @@ Route::prefix('pengajuan')->group(function () {
     Route::post('/action', [PengajuanController::class, 'actionPengajuan']);
     Route::put('/update/{id}', [PengajuanController::class, 'updatePengajuan']);
     Route::delete('/delete/{id}', [PengajuanController::class, 'deletePengajuan']);
+    Route::get('/data-dashboard', [PengajuanController::class, 'dataDashboard']);
 });
 

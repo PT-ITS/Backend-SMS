@@ -15,7 +15,6 @@ class CreatePengajuansTable extends Migration
     {
         Schema::create('pengajuans', function (Blueprint $table) {
             $table->id();
-            $table->string('jenis_pengajuan');
             $table->string('nama_pemohon');
             $table->string('alamat_pemohon');
             $table->string('jabatan_pemohon');
@@ -25,6 +24,12 @@ class CreatePengajuansTable extends Migration
             $table->date('tanggal_berakhir');
             $table->string('alamat_tujuan');
             $table->text('deskrispi_pengajuan');
+            $table->enum('jenis_pengajuan', [
+                '0', //liburan
+                '1', //umrah
+                '2', //pendidikan
+                '3', //lain-lain
+            ]);
             $table->enum('status_pengajuan', [
                 '0', //proses
                 '1', //disetujui

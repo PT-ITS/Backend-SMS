@@ -148,4 +148,55 @@ class PengajuanController extends Controller
             return response()->json(['message' => 'data pengajuan tidak ditemukan atau anda tidak memiliki akses'], 404);
         }
     }
+
+    public function dataDashboard()
+    {
+        try {
+            $jumlahPengajuan = Pengajuan::count();
+            $pengajuanDiproses = Pengajuan::where('status_pengajuan', '0')->count();
+            $pengajuanDiterima = Pengajuan::where('status_pengajuan', '1')->count();
+            $pengajuanDitolak = Pengajuan::where('status_pengajuan', '2')->count();
+
+            return response()->json([
+                'message' => 'success', 
+                'jumlahPengajuan' => $jumlahPengajuan,
+                'pengajuanDiproses' => $pengajuanDiproses,
+                'pengajuanDiterima' => $pengajuanDiterima,
+                'pengajuanDitolak' => $pengajuanDitolak,
+            ], 200);
+            
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'error', 'error' => $e->getMessage()], 500);
+        }
+    }
+    
+    public function jumlahPengajuanDiroses()
+    {
+        try {
+            $pengajuanDiproses = Pengajuan::where('status_pengajuan', '0')->count();
+            return response()->json(['message' => 'success', 'data' => $pengajuanDiproses], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'error', 'error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function jumlahPengajuanDiterima()
+    {
+        try {
+            $pengajuanDiterima = Pengajuan::where('status_pengajuan', '1')->count();
+            return response()->json(['message' => 'success', 'data' => $pengajuanDiterima], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'error', 'error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function jumlahPengajuanDitolak()
+    {
+        try {
+            $pengajuanDitolak = Pengajuan::where('status_pengajuan', '2')->count();
+            return response()->json(['message' => 'success', 'data' => $pengajuanDitolak], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'error', 'error' => $e->getMessage()], 500);
+        }
+    }
 }
