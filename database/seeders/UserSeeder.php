@@ -32,7 +32,7 @@ class UserSeeder extends Seeder
             'status' => '1',
             'password' => Hash::make('12345'),
         ]);
-        
+
         Pelaporan::create([
             "kejadian" => 'Pencurian',
             "waktu_kejadian" => '2024/07/20',
@@ -54,7 +54,7 @@ class UserSeeder extends Seeder
                 "tanggal_mulai" => '2024-07-01',
                 "tanggal_berakhir" => '2024-08-01',
                 "alamat_tujuan" => 'Jakarta',
-                "deskrispi_pengajuan" => 'Dinas ke pangkalan jakarta',
+                "deskripsi_pengajuan" => 'Dinas ke pangkalan jakarta',
                 "id_pemohon" => 2,
                 "id_atasan" => 1,
                 "status_pengajuan" => "0"
@@ -74,12 +74,11 @@ class UserSeeder extends Seeder
                 "tanggal_mulai" => '2024-07-' . str_pad($i, 2, '0', STR_PAD_LEFT),
                 "tanggal_berakhir" => '2024-08-' . str_pad($i, 2, '0', STR_PAD_LEFT),
                 "alamat_tujuan" => "Alamat Tujuan $i",
-                "deskrispi_pengajuan" => "Deskripsi Pengajuan $i",
+                "deskripsi_pengajuan" => "Deskripsi Pengajuan $i",
                 "id_pemohon" => 2, // id_pemohon contoh
                 "id_atasan" => 1,  // id_atasan contoh
                 "status_pengajuan" => (string) rand(0, 3),
             ]);
         }
-        
     }
 }
